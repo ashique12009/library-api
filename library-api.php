@@ -34,7 +34,7 @@ class LibraryAPI {
         $libraryPostType->create_post_type();
 
         require_once LIBRARY_API_PLUGIN_DIR . 'includes/class-book-post-type.php';
-        $bookPostType = new BookPostType();
+        $bookPostType = new ClassBookPostType();
         $bookPostType->create_post_type();
     }
 
