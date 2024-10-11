@@ -110,8 +110,15 @@ class ClassLibraryMemberApiController {
             return new WP_Error('invalid_library_member', 'Library member not found', ['status' => 404]);
         }
 
-        update_user_meta($library_member_id, 'library_id', $library_id);
-        update_user_meta($library_member_id, 'issued_book_id', $book_id);
+        // Check if the book is already issued to the library member
+        $issued_book = get_user_meta($library_member_id, 'issued_book_id', true);
+        if ($issued_book) {
+            return new WP_Error('book_already_issued', 'Book already issued', ['status' => 400]);
+        }
+
+        // Update the library member metadata
+        update_user_meta($library_member_id, 'issued_library_id_' . $library_id, $library_id);
+        update_user_meta($library_member_id, 'issued_book_id_' . $book_id, $book_id);
 
         return new WP_REST_Response(['user_id' => $library_member_id, 'message' => 'Book issued successfully'], 201);
     }
@@ -137,8 +144,17 @@ class ClassLibraryMemberApiController {
             return new WP_Error('invalid_library_member', 'Library member not found', ['status' => 404]);
         }
 
-        update_user_meta($library_member_id, 'library_id', $library_id);
-        update_user_meta($library_member_id, 'returned_book_id', $book_id);
+        // Check if the book is issued to the library member
+        $issued_book = get_user_meta($library_member_id, 'issued_book_id_' . $book_id, true);
+        if (!$issued_book) {
+            return new WP_Error('book_not_issued', 'Book not issued', ['status' => 400]);
+        }
+
+        // Remove the issued book metadata
+        delete_user_meta($library_member_id, 'issued_book_id_' . $book_id);
+
+        // Remove the issued library metadata
+        delete_user_meta($library_member_id, 'issued_library_id_' . $library_id);
 
         return new WP_REST_Response(['user_id' => $library_member_id, 'message' => 'Book returned successfully'], 201);
     }
