@@ -16,6 +16,7 @@ class LibraryAPI {
     // Plugin Constructor
     public function __construct() {
         $this->plugin_constants();
+        add_action('init', [$this, 'register_posts_types']);
         add_action('rest_api_init', [$this, 'register_rest_routes']);
     }
 
@@ -24,6 +25,17 @@ class LibraryAPI {
         define('LIBRARY_API_VERSION', '1.0');
         define('LIBRARY_API_PLUGIN_DIR', plugin_dir_path(__FILE__));
         define('LIBRARY_API_PLUGIN_URL', plugin_dir_url(__FILE__));
+    }
+
+    // Register post types
+    public function register_posts_types() {
+        require_once LIBRARY_API_PLUGIN_DIR . 'includes/class-library-post-type.php';
+        $libraryPostType = new LibraryPostType();
+        $libraryPostType->create_post_type();
+
+        require_once LIBRARY_API_PLUGIN_DIR . 'includes/class-book-post-type.php';
+        $bookPostType = new BookPostType();
+        $bookPostType->create_post_type();
     }
 
     // Register rest routes
