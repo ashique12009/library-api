@@ -1,6 +1,6 @@
 # Custom library API
 There are 3 main entities here: <br>
--> Library, <br>
+-> Library <br>
 -> Book <br>
 -> Library member<br>
 A book is belong to a library.<br>
