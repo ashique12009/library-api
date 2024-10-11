@@ -47,6 +47,10 @@ class LibraryAPI {
         require_once LIBRARY_API_PLUGIN_DIR . 'includes/class-book-api-controller.php';
         $bookApiController = new ClassBookApiController();
         $bookApiController->register_rest_routes();
+
+        require_once LIBRARY_API_PLUGIN_DIR . 'includes/class-library-member-api-controller.php';
+        $libraryMemberApiController = new ClassLibraryMemberApiController();
+        $libraryMemberApiController->register_rest_routes();
     }
 }
 
