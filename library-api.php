@@ -1,6 +1,6 @@
 <?php 
 /*
-Plugin Name: Custom library API Plugin
+Plugin Name: Custom library API
 Description: A custom plugin for the library to maintain by API.
 Version: 1.0
 Author: Khandoker Ashique Mahamud
@@ -30,7 +30,7 @@ class LibraryAPI {
     // Register post types
     public function register_posts_types() {
         require_once LIBRARY_API_PLUGIN_DIR . 'includes/class-library-post-type.php';
-        $libraryPostType = new LibraryPostType();
+        $libraryPostType = new ClassLibraryPostType();
         $libraryPostType->create_post_type();
 
         require_once LIBRARY_API_PLUGIN_DIR . 'includes/class-book-post-type.php';
@@ -41,7 +41,7 @@ class LibraryAPI {
     // Register rest routes
     public function register_rest_routes() {
         require_once LIBRARY_API_PLUGIN_DIR . 'includes/class-library-api-controller.php';
-        $apiController = new ClassApiController();
+        $apiController = new ClassLibraryApiController();
         $apiController->register_rest_routes();
 
         require_once LIBRARY_API_PLUGIN_DIR . 'includes/class-book-api-controller.php';
@@ -52,3 +52,18 @@ class LibraryAPI {
 
 // Initialize the plugin
 $library_api = new LibraryAPI();
+
+// Role management on plugin activation and deactivation
+require_once LIBRARY_API_PLUGIN_DIR . 'includes/class-library-member.php';
+
+// Create the role on plugin activation
+register_activation_hook(__FILE__, function() {
+    $libraryMember = new ClassLibraryMember();
+    $libraryMember->create_library_member_role();
+});
+
+// Remove the role on plugin deactivation (optional)
+register_deactivation_hook(__FILE__, function() {
+    $libraryMember = new ClassLibraryMember();
+    $libraryMember->remove_library_member_role();
+});
