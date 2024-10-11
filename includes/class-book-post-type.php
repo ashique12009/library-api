@@ -5,7 +5,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
 
-class BookPostType {
+class ClassBookPostType {
 
     // Plugin Constructor
     public function __construct() {

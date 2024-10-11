@@ -40,9 +40,13 @@ class LibraryAPI {
 
     // Register rest routes
     public function register_rest_routes() {
-        require_once LIBRARY_API_PLUGIN_DIR . 'includes/class-api-controller.php';
+        require_once LIBRARY_API_PLUGIN_DIR . 'includes/class-library-api-controller.php';
         $apiController = new ClassApiController();
         $apiController->register_rest_routes();
+
+        require_once LIBRARY_API_PLUGIN_DIR . 'includes/class-book-api-controller.php';
+        $bookApiController = new ClassBookApiController();
+        $bookApiController->register_rest_routes();
     }
 }
 
